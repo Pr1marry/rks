@@ -37,6 +37,10 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    #rest
+
+    'rest_framework',
+    
     # default_django_apps
 
     'django.contrib.admin',
@@ -47,7 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # custom_apps
-    'api'
+    'api',
 ]
 
 MIDDLEWARE = [
