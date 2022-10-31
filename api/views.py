@@ -1,5 +1,5 @@
 from .models import Album, Artist, Track
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -38,3 +38,7 @@ class ArtistViewSet(viewsets.ViewSet):
         queryset = Artist.objects.all()
         serializer = ArtistSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+def home_page(request):
+    return render(request, 'table.html')
