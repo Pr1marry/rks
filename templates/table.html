@@ -13,19 +13,19 @@
             <tr>
                 <th>Album</th>
                 <th>
+                    <div>Name</div>
                     <div>
-                        Name
-                    </div>
-                    <div>
-                        sort
+                        <a href="#" id="name">
+                            sort
+                        </a>
                     </div>
                 </th>
                 <th>
+                    <div>Artist</div>
                     <div>
-                        Artist
-                    </div>
-                    <div>
-                        sort
+                        <a href="#" id="artist">
+                            sort
+                        </a>
                     </div>
                 </th>
                 <th>Tracks</th>
@@ -36,65 +36,63 @@
     </table>
 
     <script>
-        const app = document.getElementById('album-table')
-        var request = new XMLHttpRequest()
+        const nameSort = document.getElementById('name');
+        nameSort.addEventListener("click", function () {
+            APIRequest('http://localhost:8000/api/table_list?sort=name')
+        })
 
-        request.open('GET', 'http://127.0.0.1:8000/api/album_list', true)
-        request.onload = function () {
-            // Begin accessing JSON data here
-            var albums = JSON.parse(this.response)
-            if (request.status >= 200 && request.status < 400) {
-                albums.forEach(album => {
-                    const card = document.createElement('tr')
+        const artistSort = document.getElementById('artist');
+        artistSort.addEventListener("click", function () {
+            APIRequest('http://localhost:8000/api/table_list?sort=artist')
+        })
 
-                    const albumTitle = document.createElement('th')
-                    albumTitle.textContent = album.name + '[' + album.year + ']'
+        APIRequest('http://localhost:8000/api/table_list')
 
-                    const name = document.createElement('th')
-                    name.textContent = album.name
+        function APIRequest(url) {
+            const app = document.getElementById('album-table')
+            app.replaceChildren()
+            var request = new XMLHttpRequest()
 
-                    const artistName = document.createElement('th')
+            request.open('GET', url, true)
+            request.onload = function () {
+                var albums = JSON.parse(this.response)
+                if (request.status >= 200 && request.status < 400) {
+                    albums.forEach(album => {
+                        const card = document.createElement('tr')
 
-                    var artistRequest = new XMLHttpRequest()
-                    // Get Artist by ID
-                    // artistRequest.open('GET', 'http://127.0.0.1:8000/api/artist_list/' + album.artist + '/', true)
-                    // artistRequest.onload = function () {
-                    //     var artist = JSON.parse(this.response)
-                    //     artistName.textContent = artist.name
-                    // }
+                        const albumTitle = document.createElement('th')
+                        albumTitle.textContent = album.album
 
-                    const tracksList = document.createElement('th')
+                        const name = document.createElement('th')
+                        name.textContent = album.name
 
-                    app.appendChild(card)
-                    card.appendChild(albumTitle)
-                    card.appendChild(name)
-                    card.appendChild(artistName)
-                    card.appendChild(tracksList)
+                        const artistName = document.createElement('th')
+                        artistName.textContent = album.artistname
 
-                    var trackRequest = new XMLHttpRequest()
-                    // Get tracks by Album
-                    // trackRequest.open('GET', 'http://127.0.0.1:8000/api/track_list/' + album.id, true)
-                    // trackRequest.onload = function () {
-                    //     // Begin accessing JSON data here
-                    //     var tracks = JSON.parse(this.response)
-                    //     tracks.forEach(trackAPI => {
-                    //         const track = document.createElement('div')
-                    //         track.textContent = trackAPI.name
-                    //         tracksList.appendChild(track)
-                    //     });
-                    // }
-                })
-            } else {
-                const errorMessage = document.createElement('marquee')
-                errorMessage.textContent = `Gah, it's not working!`
-                app.appendChild(errorMessage)
+                        const tracksList = document.createElement('th')
+                        album.tracks.forEach(trackAPI => {
+                            const track = document.createElement('div')
+                            track.textContent = trackAPI
+                            tracksList.appendChild(track)
+                        });
+
+                        app.appendChild(card)
+                        card.appendChild(albumTitle)
+                        card.appendChild(name)
+                        card.appendChild(artistName)
+                        card.appendChild(tracksList)
+
+                    })
+                } else {
+                    const errorMessage = document.createElement('marquee')
+                    errorMessage.textContent = `Gah, it's not working!`
+                    app.appendChild(errorMessage)
+                }
             }
-        }
 
-        request.send()
+            request.send()
+        }
     </script>
 </body>
 
 </html>
-message.txt
-4 кб

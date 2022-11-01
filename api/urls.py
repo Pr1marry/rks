@@ -5,5 +5,5 @@ from .views import TableViewSet
 
 urlpatterns = [
     path('table_list', TableViewSet.as_view({'get': 'list'})),
-    # path('track_list/<int:pk>/', TrackViewSet.as_view({'get': 'get_list'})),
+    # path('track_list/?sort=get_parameter_name/', TableViewSet.as_view({'get': 'sort_list'})),
 ]
