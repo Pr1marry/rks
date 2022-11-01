@@ -18,6 +18,6 @@
 
 # Инструкция по установке проекта:
 
-### 1: Клонируем проект к себе командой: git clone https://github.com/Pr1marry/custom_jwt_psql_drf
+### 1: Клонируем проект к себе командой: git clone https://github.com/Pr1marry/rks
 ### 2: Запускаем контейнеры командой: docker-compose up -d
 ### 3: Приложение будет доступно на 8000 порту в Debug-моде.<img width="1438" alt="Снимок экрана 2022-11-01 в 20 32 32" src="https://user-images.githubusercontent.com/104326167/199299333-a95d5894-a677-4c61-adba-3b0031951f61.png">
