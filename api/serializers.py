@@ -18,3 +18,9 @@ class ArtistSerializer(ModelSerializer):
     class Meta:
         model = Artist
         fields = '__all__'
+
+
+class NameAlbumSerializer(ModelSerializer):
+    class Meta:
+        model = Album
+        fields = ('name', 'year',)

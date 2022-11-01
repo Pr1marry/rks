@@ -1,10 +1,100 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracks</title>
 </head>
-<body>
 
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Album</th>
+                <th>
+                    <div>
+                        Name
+                    </div>
+                    <div>
+                        sort
+                    </div>
+                </th>
+                <th>
+                    <div>
+                        Artist
+                    </div>
+                    <div>
+                        sort
+                    </div>
+                </th>
+                <th>Tracks</th>
+            </tr>
+        </thead>
+        <tbody id="album-table">
+        </tbody>
+    </table>
+
+    <script>
+        const app = document.getElementById('album-table')
+        var request = new XMLHttpRequest()
+
+        request.open('GET', 'http://127.0.0.1:8000/api/album_list', true)
+        request.onload = function () {
+            // Begin accessing JSON data here
+            var albums = JSON.parse(this.response)
+            if (request.status >= 200 && request.status < 400) {
+                albums.forEach(album => {
+                    const card = document.createElement('tr')
+
+                    const albumTitle = document.createElement('th')
+                    albumTitle.textContent = album.name + '[' + album.year + ']'
+
+                    const name = document.createElement('th')
+                    name.textContent = album.name
+
+                    const artistName = document.createElement('th')
+
+                    var artistRequest = new XMLHttpRequest()
+                    // Get Artist by ID
+                    // artistRequest.open('GET', 'http://127.0.0.1:8000/api/artist_list/' + album.artist + '/', true)
+                    // artistRequest.onload = function () {
+                    //     var artist = JSON.parse(this.response)
+                    //     artistName.textContent = artist.name
+                    // }
+
+                    const tracksList = document.createElement('th')
+
+                    app.appendChild(card)
+                    card.appendChild(albumTitle)
+                    card.appendChild(name)
+                    card.appendChild(artistName)
+                    card.appendChild(tracksList)
+
+                    var trackRequest = new XMLHttpRequest()
+                    // Get tracks by Album
+                    // trackRequest.open('GET', 'http://127.0.0.1:8000/api/track_list/' + album.id, true)
+                    // trackRequest.onload = function () {
+                    //     // Begin accessing JSON data here
+                    //     var tracks = JSON.parse(this.response)
+                    //     tracks.forEach(trackAPI => {
+                    //         const track = document.createElement('div')
+                    //         track.textContent = trackAPI.name
+                    //         tracksList.appendChild(track)
+                    //     });
+                    // }
+                })
+            } else {
+                const errorMessage = document.createElement('marquee')
+                errorMessage.textContent = `Gah, it's not working!`
+                app.appendChild(errorMessage)
+            }
+        }
+
+        request.send()
+    </script>
 </body>
+
 </html>
+message.txt
+4 кб

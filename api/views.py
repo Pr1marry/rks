@@ -1,43 +1,43 @@
 from .models import Album, Artist, Track
 from django.shortcuts import get_object_or_404, render
-from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer
+from .serializers import AlbumSerializer, ArtistSerializer, TrackSerializer, NameAlbumSerializer
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 
-class TrackViewSet(viewsets.ViewSet):
-    queryset = Track.objects.all()
-    serializer = TrackSerializer(queryset, many=True)
+class TableViewSet(viewsets.ViewSet):
+    # queryset_track = Track.objects.filter('')
+    # serializer_track = TrackSerializer(queryset_track, many=True)
+    # queryset_album = Album.objects.all()
+    # serializer_album = AlbumSerializer(queryset_album, many=True)
+    # queryset_artist = Artist.objects.all()
+    # serializer_artist = ArtistSerializer(queryset_artist, many=True)
+    queryset_album_name = Album.objects.values('id', 'name', 'artist', 'year')
     http_method_names = ['get', 'post']
 
     def list(self, request):
-        # query = request.GET.get('query', None)
-        # query_set = Track.objects.filter(name=query)
-        return Response(self.serializer.data,
-                        status=status.HTTP_200_OK)
+        list_elements_1 = []
+        for el in range(len(self.queryset_album_name)):
+            list_tracks = []
+            first = self.queryset_album_name[el]['name']
+            id_album = self.queryset_album_name[el]['id']
+            queryset_track = Track.objects.filter(album=id_album).values('name')
+            for i in range(len(queryset_track)):
+                tr = queryset_track[i]['name']
+                list_tracks.append(tr)
+            # list_tracks.append(queryset_track)
+            second = self.queryset_album_name[el]['year']
+            element = str(first) + '[' + str(second) + ']'
+            names = str(first)
+            artists = self.queryset_album_name[el]['artist']
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            elements = {'album': element, 'name': names,
+                        'artist@name': artists, 'tracks': list_tracks}
+            list_elements_1.append(elements)
 
+        context = list_elements_1
+        return Response(context, status=status.HTTP_200_OK)
 
-class AlbumViewSet(viewsets.ViewSet):
-
-    def list(self, request):
-        queryset = Album.objects.all()
-        serializer = AlbumSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class ArtistViewSet(viewsets.ViewSet):
-
-    def list(self, request):
-        queryset = Artist.objects.all()
-        serializer = ArtistSerializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 def home_page(request):
